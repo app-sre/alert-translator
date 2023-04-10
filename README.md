@@ -1,5 +1,7 @@
 # Alert Translator
-Translation layer between AlertManager and destination applications
+Translation layer between AlertManager and destination applications.
+
+The `/alerts` endpoint handles POST requests from an AlertManager `webhook_config` receiver
 
 ## Environment Variables
 ### Required
