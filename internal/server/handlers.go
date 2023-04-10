@@ -14,6 +14,9 @@ import (
 )
 
 func (a *api) alert(w http.ResponseWriter, r *http.Request) {
+	status := utils.FAILURE
+	defer utils.RecordMetrics(status)
+
 	// Read request body
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -30,25 +33,22 @@ func (a *api) alert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	status := utils.SUCCESS
-	defer utils.RecordMetrics(status)
-
 	// Route alert to specified provider for processing
 	switch a.provider {
 	case GCHAT:
 		params, err := collectGChatParameters(r)
 		if err != nil {
 			log.Println(err)
-			status = utils.FAILURE
 			return
 		}
 		err = googlechat.SendAlert(a.httpClient, params, &data)
 		if err != nil {
 			log.Println(err)
-			status = utils.FAILURE
 			return
 		}
 	}
+
+	status = utils.SUCCESS
 }
 
 func collectGChatParameters(r *http.Request) (*googlechat.QueryParameters, error) {
