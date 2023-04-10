@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/dwelch0/alert-translator/internal/providers/googlechat"
+	"github.com/dwelch0/alert-translator/internal/utils"
 
 	"github.com/prometheus/alertmanager/template"
 )
@@ -28,15 +29,15 @@ func (a *api) alert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	status := "success"
 	// Route alert to specified provider for processing
 	switch a.provider {
 	case GCHAT:
 		err = googlechat.SendAlert(a.httpClient, a.webhookUrl, &data)
 		if err != nil {
 			log.Println(err)
+			status = "failure"
 		}
-		//TODO: send failure/success to metrics endpoint
 	}
+	utils.RecordMetrics(status)
 }
-
-// TODO: metrics handler
