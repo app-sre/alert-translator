@@ -48,3 +48,10 @@ curl -X POST -H "Content-Type: application/json" -d '{
 }' "http://localhost:8080/alerts?space=PLACEHOLDER&key=PLACEHOLDER&token=PLACEHOLDER"
 
 ```
+## Metrics
+### alert_translator_handled_alerts
+Counter incremented with every request to `/alerts`
+Labels:
+* status
+  * success
+  * failure
