@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/dwelch0/alert-translator/internal/server"
+	"github.com/app-sre/alert-translator/internal/server"
 )
 
 func main() {

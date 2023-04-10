@@ -1,4 +1,4 @@
-module github.com/dwelch0/alert-translator
+module github.com/app-sre/alert-translator
 
 go 1.20
 
