@@ -15,7 +15,7 @@ objects:
     ports:
       - protocol: TCP
         port: 8080
-        targetPort: ${PORT}
+        targetPort: 8080
     selector:
       app: alert-translator
 - apiVersion: apps/v1
@@ -47,8 +47,6 @@ objects:
           imagePullPolicy: Always
           name: alert-translator
           env:
-          - name: PORT
-            value: ${PORT}
           - name: PROVIDER
             value: ${PROVIDER}
           resources:
@@ -67,8 +65,6 @@ parameters:
   value: latest
   displayName: alert-translator version
   description: alert-translator version which defaults to latest
-- name: PORT
-  value: 8080
 - name: PROVIDER
   value: 'googlechat'
 - name: REPLICAS
