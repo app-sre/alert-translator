@@ -68,7 +68,7 @@ parameters:
   displayName: alert-translator version
   description: alert-translator version which defaults to latest
 - name: PORT
-  value: '8080'
+  value: 8080
 - name: PROVIDER
   value: 'googlechat'
 - name: REPLICAS
