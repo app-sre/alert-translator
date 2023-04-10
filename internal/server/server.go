@@ -10,15 +10,13 @@ import (
 
 type api struct {
 	provider   string
-	webhookUrl string
 	httpClient *http.Client
 }
 
 const (
-	PORT        = "PORT"
-	PROVIDER    = "PROVIDER"
-	WEBHOOK_URL = "WEBHOOK_URL"
-	GCHAT       = "googlechat"
+	PORT     = "PORT"
+	PROVIDER = "PROVIDER"
+	GCHAT    = "googlechat"
 )
 
 func Run() {
@@ -40,14 +38,8 @@ func initApi() *api {
 	if !set {
 		provider = GCHAT
 	}
-	webhookUrl, set := os.LookupEnv(WEBHOOK_URL)
-	if !set {
-		log.Fatalf("Required env var missing: %s", WEBHOOK_URL)
-	}
-
 	return &api{
 		provider:   provider,
 		httpClient: &http.Client{Timeout: time.Second * 5},
-		webhookUrl: webhookUrl,
 	}
 }

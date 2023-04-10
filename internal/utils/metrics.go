@@ -7,6 +7,11 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+const (
+	SUCCESS = "success"
+	FAILURE = "failure"
+)
+
 var (
 	handledAlertsCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
