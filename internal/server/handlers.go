@@ -20,7 +20,7 @@ func (a *api) alert(w http.ResponseWriter, r *http.Request) {
 	// Read request body
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		log.Println("Error reading request body")
 		return
 	}
 	defer r.Body.Close()
@@ -29,7 +29,7 @@ func (a *api) alert(w http.ResponseWriter, r *http.Request) {
 	var data template.Data
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		http.Error(w, "Error unmarshaling JSON", http.StatusBadRequest)
+		log.Println("Error unmarshaling JSON")
 		return
 	}
 
