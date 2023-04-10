@@ -23,9 +23,6 @@ var (
 func init() {
 	prometheus.MustRegister(handledAlertsCounter)
 	http.Handle("/metrics", promhttp.Handler())
-	go func() {
-		http.ListenAndServe(":9090", nil)
-	}()
 }
 
 func RecordMetrics(status string) {
