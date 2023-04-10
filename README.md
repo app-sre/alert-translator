@@ -4,8 +4,6 @@ Translation layer between AlertManager and destination applications.
 The `/alerts` endpoint handles POST requests from an AlertManager `webhook_config` receiver
 
 ## Environment Variables
-### Required
-* WEBHOOK_URL - where to route translated alerts
 ### Optional
 * PORT - defaults to `8080`
 * PROVIDER - defaults to `googlechat`
@@ -47,6 +45,6 @@ curl -X POST -H "Content-Type: application/json" -d '{
       "generatorURL": "http://localhost:9090/graph?g0.expr=vector%281%29&g0.tab=1"
     }
   ]
-}' "http://localhost:8080/alerts"
+}' "http://localhost:8080/alerts?space=PLACEHOLDER&key=PLACEHOLDER&token=PLACEHOLDER"
 
 ```

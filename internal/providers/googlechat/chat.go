@@ -10,18 +10,34 @@ import (
 	"github.com/prometheus/alertmanager/template"
 )
 
+type QueryParameters struct {
+	Space string
+	Key   string
+	Token string
+}
+
+const BASE_URL = "https://chat.googleapis.com"
+
 // Sends raw alertmanager payload to specified google chat webhook
-func SendAlert(client *http.Client, url string, data *template.Data) error {
+func SendAlert(client *http.Client, params *QueryParameters, data *template.Data) error {
 	alerts := format(data)
 	for _, alert := range alerts {
 		messageBytes, err := json.Marshal(*alert)
 		if err != nil {
 			return err
 		}
-		req, err := http.NewRequest("POST", url, bytes.NewBuffer(messageBytes))
+
+		url := fmt.Sprintf("%s/v1/spaces/%s/messages?key=%s&token=%s",
+			BASE_URL,
+			params.Space,
+			params.Key,
+			params.Token,
+		)
+		req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(messageBytes))
 		if err != nil {
 			return err
 		}
+
 		req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 		resp, err := client.Do(req)
 		resp.Body.Close()

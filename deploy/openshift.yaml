@@ -10,14 +10,14 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    name: alert-translator-${GCHAT_SPACE}
+    name: alert-translator
   spec:
     ports:
       - protocol: TCP
         port: 8080
         targetPort: ${PORT}
     selector:
-      app: alert-translator-${GCHAT_SPACE}
+      app: alert-translator
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -25,7 +25,7 @@ objects:
       app: alert-translator
     annotations:
       ignore-check.kube-linter.io/minimum-three-replicas: "alert-translator design does not adequately account for multiple replicas"
-    name: alert-translator-${GCHAT_SPACE}
+    name: alert-translator
   spec:
     replicas: ${{REPLICAS}}
     strategy:
@@ -35,11 +35,11 @@ objects:
         maxSurge: 1
     selector:
       matchLabels:
-        app: alert-translator-${GCHAT_SPACE}
+        app: alert-translator
     template:
       metadata:
         labels:
-          app: alert-translator-${GCHAT_SPACE}
+          app: alert-translator
       spec:
         serviceAccountName: alert-translator
         containers:
@@ -51,11 +51,6 @@ objects:
             value: ${PORT}
           - name: PROVIDER
             value: ${PROVIDER}
-          - name: WEBHOOK_URL
-            valueFrom:
-              secretKeyRef:
-                key: url
-                name: alert-translator-${GCHAT_SPACE}
           resources:
             requests:
               memory: ${MEMORY_REQUESTS}
@@ -74,12 +69,8 @@ parameters:
   description: alert-translator version which defaults to latest
 - name: PORT
   value: '8080'
-- name: WEBHOOK_URL
-  value: ''
 - name: PROVIDER
   value: 'googlechat'
-- name: GCHAT_SPACE
-  value: ''
 - name: REPLICAS
   value: '1'
 - name: MEMORY_REQUESTS
