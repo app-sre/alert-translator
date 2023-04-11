@@ -15,7 +15,9 @@ import (
 
 func (a *api) alert(w http.ResponseWriter, r *http.Request) {
 	status := utils.FAILURE
-	defer utils.RecordMetrics(status)
+	defer func() {
+		utils.RecordMetrics(status)
+	}()
 
 	// Read request body
 	body, err := ioutil.ReadAll(r.Body)
