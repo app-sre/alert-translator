@@ -59,6 +59,7 @@ func format(data *template.Data) []*GChatMessage {
 	var commonAlertname string
 	var commonSeverity string
 	var commonDesc string
+	var commonCluster string
 	if _, exists := data.CommonLabels["alertname"]; exists {
 		commonAlertname = data.CommonLabels["alertname"]
 	} else {
@@ -73,6 +74,11 @@ func format(data *template.Data) []*GChatMessage {
 		commonDesc = data.CommonAnnotations["description"]
 	} else {
 		commonDesc = "UNKNOWN_DESCRIPTION"
+	}
+	if _, exists := data.CommonLabels["cluster"]; exists {
+		commonCluster = data.CommonLabels["cluster"]
+	} else {
+		commonCluster = "UNKNOWN_CLUSTER"
 	}
 
 	// iterate over raws alerts and format
@@ -90,11 +96,16 @@ func format(data *template.Data) []*GChatMessage {
 		if !exists {
 			desc = commonDesc
 		}
-		message := fmt.Sprintf("%s [%s]: %s (%s)",
+		cluster, exists := alert.Labels["cluster"]
+		if !exists {
+			cluster = commonCluster
+		}
+		message := fmt.Sprintf("%s [%s] (*%s*):\ncluster: %s\n %s",
 			alertName,
 			severity,
-			desc,
 			alert.Status,
+			cluster,
+			desc,
 		)
 		formattedAlerts = append(formattedAlerts, &GChatMessage{Text: message})
 	}
