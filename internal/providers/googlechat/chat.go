@@ -106,18 +106,16 @@ func findDiffKeys(data *template.Data) ([]string, []string) {
 	}
 
 	specificLabels := map[string]bool{}
-	for _, alert := range data.Alerts {
-		for _, k := range alert.Labels.Names() {
-			if _, exist := data.CommonLabels[k]; !exist {
-				specificLabels[k] = true
-			}
-		}
-	}
 	specificAnnotations := map[string]bool{}
 	for _, alert := range data.Alerts {
-		for _, k := range alert.Annotations.Names() {
-			if _, exist := data.CommonAnnotations[k]; !exist {
-				specificAnnotations[k] = true
+		for _, l := range alert.Labels.Names() {
+			if _, exist := data.CommonLabels[l]; !exist {
+				specificLabels[l] = true
+			}
+		}
+		for _, a := range alert.Annotations.Names() {
+			if _, exist := data.CommonAnnotations[a]; !exist {
+				specificAnnotations[a] = true
 			}
 		}
 	}
