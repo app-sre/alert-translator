@@ -160,12 +160,12 @@ func processUnique(alerts []template.Alert, labels, annotations []string) []stri
 	var tmpSB strings.Builder
 	for _, alert := range alerts {
 		for _, l := range labels {
-			if val := alert.Labels[l]; val != "" {
+			if val, exists := alert.Labels[l]; exists {
 				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", l, val))
 			}
 		}
 		for _, a := range annotations {
-			if val := alert.Annotations[a]; val != "" {
+			if val, exists := alert.Annotations[a]; exists {
 				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", a, val))
 			}
 		}
