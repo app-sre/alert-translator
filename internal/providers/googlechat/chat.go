@@ -106,18 +106,16 @@ func findDiffKeys(data *template.Data) ([]string, []string) {
 	}
 
 	specificLabels := map[string]bool{}
-	for _, alert := range data.Alerts {
-		for _, k := range alert.Labels.Names() {
-			if _, exist := data.CommonLabels[k]; !exist {
-				specificLabels[k] = true
-			}
-		}
-	}
 	specificAnnotations := map[string]bool{}
 	for _, alert := range data.Alerts {
-		for _, k := range alert.Annotations.Names() {
-			if _, exist := data.CommonAnnotations[k]; !exist {
-				specificAnnotations[k] = true
+		for _, l := range alert.Labels.Names() {
+			if _, exist := data.CommonLabels[l]; !exist {
+				specificLabels[l] = true
+			}
+		}
+		for _, a := range alert.Annotations.Names() {
+			if _, exist := data.CommonAnnotations[a]; !exist {
+				specificAnnotations[a] = true
 			}
 		}
 	}
@@ -141,13 +139,13 @@ func processUnique(alerts []template.Alert, labels, annotations []string) []stri
 	var tmpSB strings.Builder
 	for _, alert := range alerts {
 		for _, l := range labels {
-			if alert.Labels[l] != "" {
-				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", l, alert.Labels[l]))
+			if val, exists := alert.Labels[l]; exists {
+				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", l, val))
 			}
 		}
 		for _, a := range annotations {
-			if alert.Annotations[a] != "" {
-				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", a, alert.Annotations[a]))
+			if val, exists := alert.Annotations[a]; exists {
+				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", a, val))
 			}
 		}
 		if tmpSB.Len() > 0 {
