@@ -63,3 +63,4 @@ vet:
 
 .PHONY: test
 test: vet
+	CGO_ENABLED=0 GOOS=$(GOOS) go test -v ./...
