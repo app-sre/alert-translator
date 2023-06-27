@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -38,7 +37,7 @@ func (a *api) alert(w http.ResponseWriter, r *http.Request) {
 	// Route alert to specified provider for processing
 	switch a.provider {
 	case GCHAT:
-		params, err := collectGChatParameters(r)
+		params, err := googlechat.CollectGChatParameters(r)
 		if err != nil {
 			log.Println(err)
 			return
@@ -51,24 +50,4 @@ func (a *api) alert(w http.ResponseWriter, r *http.Request) {
 	}
 
 	status = utils.SUCCESS
-}
-
-func collectGChatParameters(r *http.Request) (*googlechat.QueryParameters, error) {
-	space := r.URL.Query().Get("space")
-	if space == "" {
-		return nil, errors.New("Required query parameter missing: space")
-	}
-	key := r.URL.Query().Get("key")
-	if key == "" {
-		return nil, errors.New("Required query parameter missing: key")
-	}
-	token := r.URL.Query().Get("token")
-	if token == "" {
-		return nil, errors.New("Required query parameter missing: token")
-	}
-	return &googlechat.QueryParameters{
-		Space: space,
-		Key:   key,
-		Token: token,
-	}, nil
 }

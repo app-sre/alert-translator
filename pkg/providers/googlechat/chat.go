@@ -3,6 +3,7 @@ package googlechat
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -18,6 +19,26 @@ type QueryParameters struct {
 }
 
 const BASE_URL = "https://chat.googleapis.com"
+
+func CollectGChatParameters(r *http.Request) (*QueryParameters, error) {
+	space := r.URL.Query().Get("space")
+	if space == "" {
+		return nil, errors.New("Required query parameter missing: space")
+	}
+	key := r.URL.Query().Get("key")
+	if key == "" {
+		return nil, errors.New("Required query parameter missing: key")
+	}
+	token := r.URL.Query().Get("token")
+	if token == "" {
+		return nil, errors.New("Required query parameter missing: token")
+	}
+	return &QueryParameters{
+		Space: space,
+		Key:   key,
+		Token: token,
+	}, nil
+}
 
 // Sends raw alertmanager payload to specified google chat webhook
 func SendAlert(client *http.Client, params *QueryParameters, data *template.Data) error {
