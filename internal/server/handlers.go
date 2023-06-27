@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/app-sre/alert-translator/internal/providers/googlechat"
 	"github.com/app-sre/alert-translator/internal/utils"
+	"github.com/app-sre/alert-translator/pkg/providers/googlechat"
 
 	"github.com/prometheus/alertmanager/template"
 )
