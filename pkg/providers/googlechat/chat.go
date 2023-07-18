@@ -43,7 +43,7 @@ func CollectGChatParameters(r *http.Request) (*QueryParameters, error) {
 // Sends raw alertmanager payload to specified google chat webhook
 func SendAlert(client *http.Client, params *QueryParameters, data *template.Data) error {
 	alert := format(data)
-	messageBytes, err := json.Marshal(*alert)
+	messageBytes, err := json.Marshal(*alert.Message)
 	if err != nil {
 		return err
 	}
@@ -66,8 +66,13 @@ func SendAlert(client *http.Client, params *QueryParameters, data *template.Data
 		return err
 	}
 
-	log.Println("Translated alert successfully forwarded")
+	log.Println(fmt.Sprintf("Alert: `%s` successfully forwarded", alert.Name))
 	return nil
+}
+
+type GChatAlert struct {
+	Name    string
+	Message *GChatMessage
 }
 
 type GChatMessage struct {
@@ -75,7 +80,7 @@ type GChatMessage struct {
 }
 
 // processes raw AlertManager webhook payload and returns google chat formatted messages
-func format(data *template.Data) *GChatMessage {
+func format(data *template.Data) GChatAlert {
 	var msgSB strings.Builder
 	// add header
 	status := "FIRING"
@@ -114,7 +119,10 @@ func format(data *template.Data) *GChatMessage {
 		}
 	}
 
-	return &GChatMessage{Text: msgSB.String()}
+	return GChatAlert{
+		Name:    data.CommonLabels["alertname"],
+		Message: &GChatMessage{Text: msgSB.String()},
+	}
 }
 
 // AlertManager can group alerts with similiar labels/annotations
@@ -160,13 +168,13 @@ func processUnique(alerts []template.Alert, labels, annotations []string) []stri
 	var tmpSB strings.Builder
 	for _, alert := range alerts {
 		for _, l := range labels {
-			if alert.Labels[l] != "" {
-				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", l, alert.Labels[l]))
+			if val, exists := alert.Labels[l]; exists {
+				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", l, val))
 			}
 		}
 		for _, a := range annotations {
-			if alert.Annotations[a] != "" {
-				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", a, alert.Annotations[a]))
+			if val, exists := alert.Annotations[a]; exists {
+				tmpSB.WriteString(fmt.Sprintf("\t%s: %s\n", a, val))
 			}
 		}
 		if tmpSB.Len() > 0 {
