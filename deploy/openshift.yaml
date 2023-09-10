@@ -27,6 +27,7 @@ objects:
     labels:
       app: alert-translator
     annotations:
+      ignore-check.kube-linter.io/unset-cpu-requirements: "no cpu limits"
       ignore-check.kube-linter.io/minimum-three-replicas: "alert-translator design does not adequately account for multiple replicas"
     name: alert-translator
   spec:
@@ -58,7 +59,7 @@ objects:
               cpu: ${CPU_REQUESTS}
             limits:
               memory: ${MEMORY_LIMIT}
-              cpu: ${CPU_LIMIT}
+
 parameters:
 - name: IMAGE
   value: quay.io/app-sre/alert-translator
@@ -78,5 +79,3 @@ parameters:
   value: 100Mi
 - name: CPU_REQUESTS
   value: 50m
-- name: CPU_LIMIT
-  value: 100m
