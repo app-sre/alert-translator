@@ -26,7 +26,7 @@ clean:
 
 .PHONY: build
 build:
-	go build -o $(NAME) .
+	CGO_ENABLED=0 GOOS=$(GOOS) go build -o $(NAME) .
 
 .PHONY: image
 image:
