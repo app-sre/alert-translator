@@ -1,10 +1,10 @@
 module github.com/app-sre/alert-translator
 
-go 1.20
+go 1.23
 
 require (
-	github.com/prometheus/alertmanager v0.25.0
-	github.com/prometheus/client_golang v1.14.0
+	github.com/prometheus/alertmanager v0.28.1
+	github.com/prometheus/client_golang v1.22.0
 )
 
 require (
