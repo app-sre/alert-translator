@@ -1,6 +1,6 @@
 module github.com/app-sre/alert-translator
 
-go 1.23
+go 1.24
 
 require (
 	github.com/prometheus/alertmanager v0.28.1
