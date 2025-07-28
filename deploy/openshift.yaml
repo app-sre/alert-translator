@@ -62,7 +62,7 @@ objects:
 
 parameters:
 - name: IMAGE
-  value: quay.io/app-sre/alert-translator
+  value: quay.io/redhat-services-prod/app-sre-tenant/alert-translator-main/alert-translator-main
   displayName: alert-translator image
   description: alert-translator docker image. Defaults to quay.io/app-sre/alert-translator
 - name: IMAGE_TAG
