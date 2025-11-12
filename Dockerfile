@@ -7,7 +7,7 @@ RUN make build
 FROM builder AS test
 RUN make test
 
-FROM registry.access.redhat.com/ubi9-minimal:9.6-1752587672 AS prod
+FROM registry.access.redhat.com/ubi9-minimal:9.7-1762956380 AS prod
 LABEL konflux.additional-tags=1.0.0
 COPY --from=builder /workspace/alert-translator  /bin/alert-translator
 RUN microdnf update -y && microdnf install -y git && microdnf install -y ca-certificates
