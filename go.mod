@@ -1,6 +1,8 @@
 module github.com/app-sre/alert-translator
 
-go 1.24
+go 1.24.0
+
+toolchain go1.24.6
 
 require (
 	github.com/prometheus/alertmanager v0.28.1
@@ -16,7 +18,7 @@ require (
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/shurcooL/httpfs v0.0.0-20230704072500-f1e31cf0ba5c // indirect
 	github.com/shurcooL/vfsgen v0.0.0-20230704071429-0000e147ea92 // indirect
-	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 )
